@@ -1,0 +1,38 @@
+version: "3.1"
+services:
+
+  memcached:
+    image: memcached:alpine
+    container_name: proshop-memcached
+
+  mysql:
+    image: mysql:8.0
+    container_name: proshop-mysql
+    working_dir: /app
+    volumes:
+      - .:/app
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=app
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+    ports:
+      - "3402:3306"
+
+  web:
+    image: nginx:alpine
+    container_name: proshop-web
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - ./docker/web/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "3400:80"
+
+  php-fpm:
+    build: docker/php-fpm
+    container_name: proshop-php-fpm
+    working_dir: /app
+    volumes:
+      - ./app:/app
+      - ./docker/php-fpm/php-ini-overrides.ini:/etc/php/7.2/fpm/conf.d/99-overrides.ini
