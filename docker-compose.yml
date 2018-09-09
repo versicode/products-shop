@@ -11,6 +11,7 @@ services:
     working_dir: /app
     volumes:
       - .:/app
+      - ./.data/db/mysql:/var/lib/mysql
     environment:
       - MYSQL_ROOT_PASSWORD=root
       - MYSQL_DATABASE=app
