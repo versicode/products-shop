@@ -9,3 +9,10 @@ if (is_file($configPath)) {
 }
 
 require_once ROOT_PATH.'/common/db.php';
+require_once ROOT_PATH.'/common/router.php';
+require_once ROOT_PATH.'/helpers/faker.php';
+
+global $config;
+
+$uri = $_SERVER['REQUEST_URI'] !== '/' ? $_SERVER['REQUEST_URI'] : $config['router']['default'];
+router\resolve(router\normalizeUri($uri), $config['router']['404'])();
