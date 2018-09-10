@@ -5,9 +5,11 @@
 $action('index', function () {
     // $data['products'] = product\getAllProducts();
     // $data['products'] = ['test'];
-    print_r('site/index');
+    $data = [
+        'welcome' => 'Hello world!',
+    ];
 
-    // return view('admin/index', $data);
+    return render\view('site/index', $data);
 });
 
 $action('not-found', function () {

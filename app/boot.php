@@ -10,6 +10,7 @@ if (is_file($configPath)) {
 
 require_once ROOT_PATH.'/common/db.php';
 require_once ROOT_PATH.'/common/router.php';
+require_once ROOT_PATH.'/common/render.php';
 require_once ROOT_PATH.'/helpers/faker.php';
 
 global $config;
