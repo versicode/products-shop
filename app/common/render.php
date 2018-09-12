@@ -2,15 +2,20 @@
 
 namespace render;
 
-function view($templateUri, $data)
+function view($templateUri, $data = [], $layoutUri = false)
 {
     extract($data, EXTR_SKIP);
 
+    $templateFile = buildAndCheckTemplateFilePath($templateUri);
+
+    require_once $layoutUri ? buildAndCheckTemplateFilePath($layoutUri)
+                            : $templateFile;
+}
+
+function buildAndCheckTemplateFilePath($templateUri)
+{
     $templateFile = ROOT_PATH."/views/{$templateUri}.php";
 
-    if (is_file($templateFile)) {
-        require_once $templateFile;
-    } else {
-        echo 'Template file not found';
-    }
+    return !is_file($layoutTemplateFile) ? $templateFile
+                                         : die('Layout template file not found');
 }

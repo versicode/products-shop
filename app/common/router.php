@@ -4,8 +4,6 @@ namespace router;
 
 function resolve($uri, $uri404)
 {
-    global $config;
-
     $actions = [];
 
     $controller = getControllerFromUri($uri);
@@ -38,10 +36,19 @@ function getControllerFromUri($uri)
 
 function normalizeUri($uri)
 {
-    return ltrim($uri, '/');
+    return ltrim(parse_url($uri, PHP_URL_PATH), '/');
 }
 
 function getControllerFilePath($controller)
 {
     return ROOT_PATH."/controllers/{$controller}.php";
+}
+
+function parseIdentifier($id)
+{
+    return filter_var($id, FILTER_VALIDATE_INT, [
+        'options' => [
+            'min_range' => 1,
+        ],
+    ]);
 }

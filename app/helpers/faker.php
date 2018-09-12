@@ -23,5 +23,5 @@ function generateRandomFloat($min = 0, $max = 1, $decimalPlaces = 2)
 
 function generateRandomPictureUrl()
 {
-    return 'uploads/default.png?'.uniqid();
+    return 'uploads/'.mt_rand(1, 10).'.jpeg?'.uniqid();
 }

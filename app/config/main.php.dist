@@ -2,13 +2,17 @@
 
 return [
     'db' => [
-        'host'     => '',
-        'port'     => '',
-        'dbname'   => '',
-        'user'     => '',
-        'password' => '',
+        'host'     => 'mysql',
+        'port'     => '3306',
+        'dbname'   => 'app',
+        'user'     => 'root',
+        'password' => 'root',
     ],
     'router' => {
-        'default' => 'site/index'
-    }
+        'default' => 'site/index',
+        '404' => 'site/not-found',
+    },
+    'template' => [
+        'layout' => 'site_layout'
+    ]
 ]

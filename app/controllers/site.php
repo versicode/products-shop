@@ -3,17 +3,11 @@
 /* @var $action */
 
 $action('index', function () {
-    // $data['products'] = product\getAllProducts();
-    // $data['products'] = ['test'];
-    $data = [
-        'welcome' => 'Hello world!',
-    ];
+    $data['products'] = models\product\find();
 
-    return render\view('site/index', $data);
+    render\view('site/index', $data, 'site_layout');
 });
 
 $action('not-found', function () {
-    print_r('site/not-found');
-
-    // return view('site/not-found', $data);
+    render\view('site/404', $data, 'site_layout');
 });

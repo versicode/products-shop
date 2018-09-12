@@ -45,10 +45,10 @@ function fillProductsTableWithData()
               .", '".faker\generateRandomPictureUrl()."')";
     }
 
-    for ($i = 0; $i < 200; ++$i) {
+    for ($i = 1; $i < 200; ++$i) {
         $sql = 'INSERT INTO `products` (`name`, `description`, `price`, `picture_url`) VALUES';
 
-        for ($j = 0; $j < 5000; ++$j) {
+        for ($j = 1; $j < 5000; ++$j) {
             $sql .= generateInsertString().', ';
         }
 
