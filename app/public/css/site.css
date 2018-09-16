@@ -55,12 +55,11 @@ body {
 }
 
     .footer__pager {
-        flex-basis: 226px;
         flex-grow: 1;
     }
 
     .footer__copyright {
-        flex-grow: 2;
+        flex-grow: 1;
         text-align: right;
         margin-bottom: 0;
         color: #aeaeae;
@@ -87,7 +86,7 @@ body {
     padding-bottom: 8px;
     text-align: center;
     max-width: 224px;
-    transition: all 0.15s ease-in;
+    transition: all 0.15s;
     background-color: #fff;
     width: 100%;
     line-height: 1.3;
@@ -149,7 +148,7 @@ body {
         /* content: "\021BE"; */
         /* content: "\02193"; */
         content: "";
-        transition: all 0.15s ease-in;
+        transition: all 0.15s;
         width: 6px;
         height: 14px;
         margin-left: 10px;
@@ -201,6 +200,8 @@ body {
 
         .product__description {
             line-height: 1.7;
+            max-width: 520px;
+            overflow: hidden;
         }
 
     .product__meta {
@@ -231,21 +232,22 @@ body {
 
 .pager {
     display: flex;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-items: center;
     color: #333333;
 }
 
     .pager__item {
         color: #333333;
+        margin-right: 15px;
     }
 
     .pager__item:not(.button) {
         font-size: 24px;
-        transition: color 0.15s ease-in;
+        transition: color 0.15s;
     }
 
-    .pager__item:not(.button):hover {
+    .pager__item:not(.button):not(span):hover {
         color: #35d6b7;
         text-decoration: none;
     }
@@ -255,5 +257,22 @@ body {
     }
 
     .pager__item.button {
-        max-width: 112px;
+        max-width: 86px;
     }
+
+
+
+
+
+/*------------------------------------*\
+  #Lazy
+\*------------------------------------*/
+
+img.lazy {
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+img[data-src].lazy {
+    opacity: 0;
+}

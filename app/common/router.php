@@ -29,12 +29,17 @@ function resolve($uri, $uri404)
     return $actions[$uri404];
 }
 
-function redirect($uri)
+function makeAbsoluteUrl($uri)
 {
     $protocol = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http');
     $host = $_SERVER['HTTP_HOST'];
 
-    header("Location: {$protocol}://{$host}/{$uri}");
+    return "{$protocol}://{$host}/{$uri}";
+}
+
+function redirect($uri)
+{
+    header('Location: '.makeAbsoluteUrl($uri));
     exit;
 }
 
