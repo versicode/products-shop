@@ -2,17 +2,20 @@
 
 namespace models\product;
 
-function find($limit = 20)
+function find($orderByField, $orderByDirection, $offset = 0, $limit = 10)
 {
     global $db;
 
-    $sql = 'SELECT *
+    $sql = "SELECT *
               FROM products
-             ORDER BY id DESC
-             LIMIT ?;';
+             ORDER BY {$orderByField} {$orderByDirection}
+             LIMIT :limit OFFSET :offset;";
 
     $query = $db->prepare($sql);
-    $query->execute([$limit]);
+    $query->execute([
+        ':limit' => $limit,
+        ':offset' => $offset,
+    ]);
 
     return $query->fetchAll();
 }

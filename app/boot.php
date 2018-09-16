@@ -17,6 +17,6 @@ require_once ROOT_PATH.'/models/product.php';
 
 global $config;
 
-$uri = $_SERVER['REQUEST_URI'] !== '/' ? $_SERVER['REQUEST_URI'] : $config['router']['default'];
+$uri = router\normalizeUri($_SERVER['REQUEST_URI']) !== '' ? $_SERVER['REQUEST_URI'] : $config['router']['default'];
 
 router\resolve(router\normalizeUri($uri), $config['router']['404'])($_GET, $_POST);

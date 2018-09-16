@@ -23,5 +23,5 @@ function generateRandomFloat($min = 0, $max = 1, $decimalPlaces = 2)
 
 function generateRandomPictureName()
 {
-    return mt_rand(1, 10).'.jpeg?'.uniqid();
+    return mt_rand(1, 10).'.jpg?'.uniqid();
 }

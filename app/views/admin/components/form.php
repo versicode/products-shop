@@ -42,7 +42,7 @@
                        class="form-control-file"
                        >
             </div>
-            <img width="300px" height="300px" src="/uploads/products/<?=$product['picture_name'] ? $product['picture_name'] : 'default.png';?>" alt="">
+            <img width="300px" height="300px" src="<?=$product['picture_name'] ? '/uploads/products/'.$product['picture_name'] : '/uploads/default.jpg';?>" alt="">
         </div>
     </div>
     <input type="submit" name="submit" class="btn btn-primary" value="Submit" />

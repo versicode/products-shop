@@ -53,11 +53,13 @@ function getControllerFilePath($controller)
     return ROOT_PATH."/controllers/{$controller}.php";
 }
 
-function parseIdentifier($id)
+function parseIdentifier($id, $default = false)
 {
-    return filter_var($id, FILTER_VALIDATE_INT, [
+    $identifier = filter_var($id, FILTER_VALIDATE_INT, [
         'options' => [
             'min_range' => 1,
         ],
     ]);
+
+    return !$identifier && $default ? $default : $identifier;
 }
