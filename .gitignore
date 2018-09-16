@@ -3,3 +3,14 @@ tags
 .php_cs.cache
 app/config/main.php
 query.sql
+app/public/uploads/products/*
+!app/public/uploads/products/1.jpg
+!app/public/uploads/products/2.jpg
+!app/public/uploads/products/3.jpg
+!app/public/uploads/products/4.jpg
+!app/public/uploads/products/5.jpg
+!app/public/uploads/products/6.jpg
+!app/public/uploads/products/7.jpg
+!app/public/uploads/products/8.jpg
+!app/public/uploads/products/9.jpg
+!app/public/uploads/products/10.jpg

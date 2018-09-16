@@ -16,6 +16,6 @@ function buildAndCheckTemplateFilePath($templateUri)
 {
     $templateFile = ROOT_PATH."/views/{$templateUri}.php";
 
-    return !is_file($layoutTemplateFile) ? $templateFile
-                                         : die('Layout template file not found');
+    return is_file($templateFile) ? $templateFile
+                                  : die('Layout template file not found');
 }

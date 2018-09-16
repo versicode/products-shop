@@ -1,2 +1,2 @@
-<h1>Create</h1>
+<h3>Create</h3>
 <?php render\view('admin/components/form', $data); ?>

@@ -6,30 +6,85 @@ function find($limit = 20)
 {
     global $db;
 
-    $sql = <<<SQL
-        SELECT *
-          FROM products
-         LIMIT ?;
-SQL;
+    $sql = 'SELECT *
+              FROM products
+             ORDER BY id DESC
+             LIMIT ?;';
 
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$limit]);
+    $query = $db->prepare($sql);
+    $query->execute([$limit]);
 
-    return $stmt->fetchAll();
+    return $query->fetchAll();
 }
 
 function findOne($id)
 {
     global $db;
 
-    $sql = <<<SQL
-        SELECT *
-          FROM products
-         WHERE id = ?
-SQL;
+    if (!$id) {
+        return null;
+    }
 
-    $stmt = $db->prepare($sql);
-    $stmt->execute([$id]);
+    $sql = 'SELECT *
+              FROM products
+             WHERE id = ?';
 
-    return $stmt->fetch();
+    $query = $db->prepare($sql);
+    $query->execute([$id]);
+
+    return $query->fetch();
+}
+
+function insertOne($name, $price, $description, $pictureName)
+{
+    global $db;
+
+    $sql = 'INSERT INTO products (name, price, description, picture_name)
+            VALUES (:name, :price, :description, :picture_name)';
+
+    $query = $db->prepare($sql);
+
+    return $query->execute([
+        ':name' => $name,
+        ':price' => $price,
+        ':description' => $description,
+        ':picture_name' => $pictureName,
+    ]);
+}
+
+function updateOne($id, $name, $price, $description, $pictureName)
+{
+    global $db;
+
+    // var_dump($id, $name, $price, $description, $pictureName);
+
+    $sql = 'UPDATE products
+               SET name = :name,
+                   price = :price,
+                   description = :description,
+                   picture_name = :picture_name
+             WHERE id = :id';
+
+    $query = $db->prepare($sql);
+
+    return $query->execute([
+        ':id' => $id,
+        ':name' => $name,
+        ':price' => $price,
+        ':description' => $description,
+        ':picture_name' => $pictureName,
+    ]);
+}
+
+function removeOne($id)
+{
+    global $db;
+
+    $sql = 'DELETE
+              FROM products
+             WHERE id = ?;';
+
+    $query = $db->prepare($sql);
+
+    return $query->execute([$id]);
 }

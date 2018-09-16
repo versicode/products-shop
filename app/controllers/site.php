@@ -9,5 +9,5 @@ $action('index', function () {
 });
 
 $action('not-found', function () {
-    render\view('site/404', $data, 'site_layout');
+    render\view('site/404', [], 'site_layout');
 });

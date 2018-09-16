@@ -1,3 +1,2 @@
-<h1>Edit</h1>
+<h3>Edit</h3>
 <?php render\view('admin/components/form', $data); ?>
-<?php var_dump($product); ?>

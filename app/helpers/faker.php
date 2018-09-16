@@ -11,7 +11,7 @@ function generateRandomString($length = 10)
         $randomString .= $characters[mt_rand(0, $charactersLength - 1)];
     }
 
-    return $randomString;
+    return ucfirst(trim($randomString));
 }
 
 function generateRandomFloat($min = 0, $max = 1, $decimalPlaces = 2)
@@ -21,7 +21,7 @@ function generateRandomFloat($min = 0, $max = 1, $decimalPlaces = 2)
     return number_format($number, $decimalPlaces, '.', '');
 }
 
-function generateRandomPictureUrl()
+function generateRandomPictureName()
 {
-    return 'uploads/'.mt_rand(1, 10).'.jpeg?'.uniqid();
+    return mt_rand(1, 10).'.jpeg?'.uniqid();
 }

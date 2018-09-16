@@ -2,25 +2,23 @@
 
 require_once ROOT_PATH.'/helpers/faker.php';
 
-const PRODUCTS_TABLE_NAME = 'products';
-
 function run()
 {
     global $db;
 
-    $sql = "SHOW TABLES LIKE '".PRODUCTS_TABLE_NAME."'";
+    $sql = "SHOW TABLES LIKE 'products'";
 
     // Check is table exists
     if (!$db->query($sql)->fetch()) {
         echo 'creating products table...'.PHP_EOL;
 
-        $sql = 'CREATE TABLE `'.PRODUCTS_TABLE_NAME.'` 
+        $sql = 'CREATE TABLE `products` 
              ( 
                  `id`   INT(11) NOT NULL AUTO_INCREMENT, 
                  `name` VARCHAR(255) NOT NULL, 
                  `description` text NOT NULL, 
                  `price`       DECIMAL(10,3) NOT NULL, 
-                 `picture_url` VARCHAR(255) NOT NULL,
+                 `picture_name` VARCHAR(255) NOT NULL,
                  PRIMARY KEY (`id`)
              ) 
              engine = InnoDB;';
@@ -39,21 +37,23 @@ function fillProductsTableWithData()
 
     function generateInsertString()
     {
-        return " ('".faker\generateRandomString(64)
+        return " ('".faker\generateRandomString(mt_rand(8, 16))
               ."','".faker\generateRandomString(500)
               ."', ".faker\generateRandomFloat(1, 30000)
-              .", '".faker\generateRandomPictureUrl()."')";
+              .", '".faker\generateRandomPictureName()."')";
     }
 
-    for ($i = 1; $i < 200; ++$i) {
-        $sql = 'INSERT INTO `products` (`name`, `description`, `price`, `picture_url`) VALUES';
+    for ($i = 0; $i < 200; ++$i) {
+        $sql = 'INSERT INTO `products` (`name`, `description`, `price`, `picture_name`) VALUES';
 
         for ($j = 1; $j < 5000; ++$j) {
             $sql .= generateInsertString().', ';
         }
 
         $sql .= generateInsertString().';';
-
-        var_dump($db->exec($sql));
+        $db->exec($sql);
+        echo '.';
     }
+
+    echo PHP_EOL.'1000000 products addded!'.PHP_EOL;
 }
