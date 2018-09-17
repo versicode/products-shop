@@ -12,6 +12,9 @@ if (is_file($configPath)) {
 }
 
 require_once ROOT_PATH.'/common/db.php';
+require_once ROOT_PATH.'/common/memcached.php';
+require_once ROOT_PATH.'/common/cacher.php';
+require_once ROOT_PATH.'/models/product.php';
 
 if (isset($argv) && $command = $argv[1]) {
     runCommand($command);

@@ -19,7 +19,8 @@ function run()
                  `description` text NOT NULL, 
                  `price`       DECIMAL(10,3) NOT NULL, 
                  `picture_name` VARCHAR(255) NOT NULL,
-                 PRIMARY KEY (`id`)
+                 PRIMARY KEY (`id`),
+                 INDEX `price` (`price`)
              ) 
              engine = InnoDB;';
 

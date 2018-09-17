@@ -33,14 +33,21 @@ $action('index', function ($params) {
         return $key === $sortBy;
     }, ARRAY_FILTER_USE_BOTH));
 
-    $limit = 10;
+    $limit = $config['template']['products_per_page'];
     $offset = ($page - 1) * $limit;
 
     $data['products'] = models\product\find($orderByField, $orderByDirection, $offset, $limit);
     $data['page'] = $page;
     $data['sort'] = $sortBy;
 
-    $lastPage = 100000; //TODO
+    global $memcached;
+    if (!$productsCount = $memcached->get('products_count')) {
+        $productsCount = cacher\productsCount();
+
+        $memcached->set('products_count', $productsCount, 60*60);
+    }
+
+    $lastPage = floor($productsCount / $limit);
 
     $data['urls'] = [
         'id_sort' => $sortBy === 'id_asc' ? $buildUrl(['sort' => 'id_desc']) : $buildUrl(['sort' => 'id_asc']),

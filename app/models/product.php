@@ -30,7 +30,7 @@ function findOne($id)
 
     $sql = 'SELECT *
               FROM products
-             WHERE id = ?';
+             WHERE id = ?;';
 
     $query = $db->prepare($sql);
     $query->execute([$id]);
@@ -90,4 +90,14 @@ function removeOne($id)
     $query = $db->prepare($sql);
 
     return $query->execute([$id]);
+}
+
+function count()
+{
+    global $db;
+
+    $sql = 'SELECT COUNT(*)
+              FROM products;';
+
+    return $db->query($sql)->fetchColumn();
 }

@@ -8,7 +8,10 @@ $action('create', function (&$params, &$body) {
 
         $pictureName = input\uploadProductPicture('picture');
 
-        models\product\insertOne($name, $price, $description, $pictureName);
+        global $memcached;
+        if (models\product\insertOne($name, $price, $description, $pictureName)) {
+            $memcached->increment('products_count');
+        }
 
         router\redirect('site/index');
     }
@@ -55,7 +58,10 @@ $action('delete', function (&$params) {
         router\redirect('site/index');
     }
 
-    models\product\removeOne($id);
+    global $memcached;
+    if (models\product\removeOne($id)) {
+        $memcached->decrement('products_count');
+    }
 
     router\redirect('site/index');
 });

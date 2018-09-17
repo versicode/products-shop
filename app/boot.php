@@ -8,7 +8,10 @@ if (is_file($configPath)) {
     die('Can\'t start, please copy config/main.php.dist to config/main.php and install your variables.');
 }
 
+
 require_once ROOT_PATH.'/common/db.php';
+require_once ROOT_PATH.'/common/memcached.php';
+require_once ROOT_PATH.'/common/cacher.php';
 require_once ROOT_PATH.'/common/router.php';
 require_once ROOT_PATH.'/common/render.php';
 require_once ROOT_PATH.'/helpers/input.php';
@@ -16,6 +19,9 @@ require_once ROOT_PATH.'/helpers/input.php';
 require_once ROOT_PATH.'/models/product.php';
 
 global $config;
+
+global $memcached;
+// print $memcached->get('products_count');
 
 $uri = router\normalizeUri($_SERVER['REQUEST_URI']) !== '' ? $_SERVER['REQUEST_URI'] : $config['router']['default'];
 
