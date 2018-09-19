@@ -8,7 +8,6 @@ if (is_file($configPath)) {
     die('Can\'t start, please copy config/main.php.dist to config/main.php and install your variables.');
 }
 
-
 require_once ROOT_PATH.'/common/db.php';
 require_once ROOT_PATH.'/common/memcached.php';
 require_once ROOT_PATH.'/common/cacher.php';

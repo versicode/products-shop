@@ -101,3 +101,71 @@ function count()
 
     return $db->query($sql)->fetchColumn();
 }
+
+/* ======== */
+/* Not safe */
+/* ======== */
+
+function findByIds($ids, $field, $direction)
+{
+    global $db;
+
+    $ids = implode(',', $ids);
+
+    $sql = "SELECT *
+              FROM products
+              WHERE id IN ({$ids})
+              ORDER BY {$field} {$direction};";
+
+    return $db->query($sql)->fetchAll();
+}
+
+function findIds($field, $direction, $controlValue, $limit = 10)
+{
+    global $db;
+
+    $symbol = $direction === 'ASC' ? '>' : '<';
+
+    $sql = "SELECT id
+              FROM products
+             WHERE {$field} {$symbol} {$controlValue}
+             ORDER BY {$field} {$direction}
+             LIMIT {$limit};";
+    // var_dump($sql);
+
+    return $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN, 0);
+}
+
+function findIdsByPrice($price, $notInIds)
+{
+    global $db;
+
+    $sql = "SELECT id
+              FROM products
+              WHERE price = {$price}
+              AND id NOT IN(".implode(',', $notInIds).');';
+
+    return $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN, 0);
+}
+
+function findMax($field)
+{
+    global $db;
+
+    $sql = "SELECT MAX({$field})
+              FROM products;";
+
+    return $db->query($sql)->fetchColumn();
+}
+
+function findPrice($id)
+{
+    global $db;
+
+    $sql = "SELECT price
+              FROM products
+             WHERE id = {$id};";
+    // var_dump($sql);
+
+    return $db->query($sql)->fetchColumn();
+}

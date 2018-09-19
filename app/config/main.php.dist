@@ -10,14 +10,14 @@ return [
     ],
     'memcached' => [
         'host' => 'memcached',
-        'port' => '11211'
+        'port' => '11211',
     ],
-    'router' => {
+    'router' => [
         'default' => 'site/index',
         '404' => 'site/not-found',
-    },
+    ],
     'template' => [
         'layout' => 'site_layout',
         'products_per_page' => 10,
     ]
-]
+];

@@ -9,4 +9,5 @@
 - set required params in app/config/main.php
 - seed database with test data (it may take a while) ```docker exec -it proshop-php-fpm sh -c "php command.php seed"```
 - ```docker-compose up```
+- warmup a cache (it may take a while too) ```docker exec -it proshop-php-fpm sh -c "php command.php cache"```
 - Open browser at http://localhost:3400/

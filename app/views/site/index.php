@@ -21,7 +21,7 @@ switch ($sort) {
 
 ?>
 <header class="header container">
-    <img class="header__logo" src="/img/logo.svg" alt="">
+    <a href="/"><img class="header__logo" src="/img/logo.svg" alt=""></a>
 
     <a class="header__button button" href="/admin/create">Добавить продукт</a>
     <div class="header__sort sort">
@@ -86,7 +86,7 @@ switch ($sort) {
         <?php endif; ?>
 
         <?php if ($urls['last_page']): ?>
-            <a class="pager__item button" href="<?=$urls['last_page'];?>">last</a>
+            <a class="pager__item button" href="<?=$urls['last_page']; ?>">last</a>
         <?php endif; ?>
     </div>
 
