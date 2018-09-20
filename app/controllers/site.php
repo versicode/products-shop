@@ -76,7 +76,7 @@ $action('index', function (&$params) {
 });
 
 $action('about', function () {
-    render\view('admin/about', [], 'about_layout');
+    render\view('site/about', [], 'about_layout');
 });
 
 $action('not-found', function () {
