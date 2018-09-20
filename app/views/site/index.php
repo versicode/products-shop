@@ -23,7 +23,7 @@ switch ($sort) {
 <header class="header container">
     <a href="/"><img class="header__logo" src="/img/logo.svg" alt=""></a>
 
-    <a class="header__button button" href="/admin/create">Добавить продукт</a>
+    <a class="header__button button" href="/admin/create">Add new product</a>
     <div class="header__sort sort">
 
         <p class="sort__text">Sort by:</p>

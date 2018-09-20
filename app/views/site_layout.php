@@ -10,7 +10,6 @@
 
     <?php require_once $templateFile; ?>
 
-    <script src="/js/main.js"></script>
     <script src="/js/webfont.js"></script>
     <script>
     WebFont.load({
@@ -18,6 +17,16 @@
             families: ['Roboto:400,500']
         }
     });
+    </script>
+
+    <script>
+    /* Lazy Load */
+    document.querySelectorAll('img[data-src].lazy').forEach((img) => {
+        img.setAttribute('src', img.getAttribute('data-src'))
+        img.onload = function() {
+            img.removeAttribute('data-src')
+        }
+    })
     </script>
 </body>
 </html>

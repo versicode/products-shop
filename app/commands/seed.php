@@ -2,6 +2,8 @@
 
 require_once ROOT_PATH.'/helpers/faker.php';
 
+/* seed database with data */
+
 function run()
 {
     global $db;

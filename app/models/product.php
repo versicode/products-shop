@@ -59,8 +59,6 @@ function updateOne($id, $name, $price, $description, $pictureName)
 {
     global $db;
 
-    // var_dump($id, $name, $price, $description, $pictureName);
-
     $sql = 'UPDATE products
                SET name = :name,
                    price = :price,
@@ -131,7 +129,6 @@ function findIds($field, $direction, $controlValue, $limit = 10)
              WHERE {$field} {$symbol} {$controlValue}
              ORDER BY {$field} {$direction}
              LIMIT {$limit};";
-    // var_dump($sql);
 
     return $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN, 0);
 }
@@ -165,7 +162,6 @@ function findPrice($id)
     $sql = "SELECT price
               FROM products
              WHERE id = {$id};";
-    // var_dump($sql);
 
     return $db->query($sql)->fetchColumn();
 }

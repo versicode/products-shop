@@ -8,9 +8,7 @@
 <body>
 
     <div class="container">
-        <h1>Admin</h1>
-
-        <hr>
+        <br>
 
         <?php require_once $templateFile; ?>
     </div>

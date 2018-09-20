@@ -10,7 +10,7 @@ $action('index', function (&$params) {
     };
 
     $page = isset($params['page']) ? router\parseIdentifier($params['page'], 1) : 1;
-    $sortBy = isset($params['sort']) ? $params['sort'] : 'id_asc';
+    $sortBy = isset($params['sort']) ? $params['sort'] : 'id_desc';
 
     $possibleSorts = [
         'id_asc' => [
@@ -40,14 +40,6 @@ $action('index', function (&$params) {
     $limit = $config['template']['products_per_page'];
     $offset = ($page - 1) * $limit;
 
-    // try get products from cache
-    if ($productsIds = $memcached->get("page_{$page}_{$orderByField}_{$orderByDirection}")) {
-        // var_dump('from cache');
-        $data['products'] = models\product\findByIds($productsIds, $orderByField, $orderByDirection);
-    } else {
-        $data['products'] = models\product\find($orderByField, $orderByDirection, $offset, $limit);
-    }
-
     $data['page'] = $page;
     $data['sort'] = $sortBy;
 
@@ -59,19 +51,32 @@ $action('index', function (&$params) {
 
     $lastPage = floor($productsCount / $limit);
 
+    if ($page > $lastPage) router\redirect('site/404');
+
+    // try get products from cache except for first page
+    if (($page === 1 && $sortBy === 'id_desc') === false && $productsIds = $memcached->get("page_{$page}_{$orderByField}_{$orderByDirection}")) {//TODO proveirt
+        $data['products'] = models\product\findByIds($productsIds, $orderByField, $orderByDirection);
+    } else {
+        $data['products'] = models\product\find($orderByField, $orderByDirection, $offset, $limit);
+    }
+
     $data['urls'] = [
         'id_sort'    => $sortBy === 'id_asc'    ? $buildUrl(['sort' => 'id_desc'])    : $buildUrl(['sort' => 'id_asc']),
         'price_sort' => $sortBy === 'price_asc' ? $buildUrl(['sort' => 'price_desc']) : $buildUrl(['sort' => 'price_asc']),
 
-        'prev_page'    =>  $page > 1              ? $buildUrl(['page' =>  $page - 1])  : false,
-        'next_page'    =>  $page < $lastPage      ? $buildUrl(['page' =>  $page + 1])  : false,
-        'next_page_2'  =>  $page + 2 < $lastPage  ? $buildUrl(['page' =>  $page + 2])  : false,
-        'next_page_50' =>  $page + 50 < $lastPage ? $buildUrl(['page' =>  $page + 50]) : false,
-        'first_page'   =>  $page > 1              ? $buildUrl(['page' =>  1])          : false,
-        'last_page'    =>  $page < $lastPage      ? $buildUrl(['page' =>  $lastPage])  : false,
+        'prev_page'    =>  $page > 1              ? $buildUrl(['page' =>  $page - 1 , 'sort' => $sortBy]) : false,
+        'next_page'    =>  $page < $lastPage      ? $buildUrl(['page' =>  $page + 1 , 'sort' => $sortBy]) : false,
+        'next_page_2'  =>  $page + 2 < $lastPage  ? $buildUrl(['page' =>  $page + 2 , 'sort' => $sortBy]) : false,
+        'next_page_50' =>  $page + 50 < $lastPage ? $buildUrl(['page' =>  $page + 50, 'sort' => $sortBy]) : false,
+        'first_page'   =>  $page > 1              ? $buildUrl(['page' =>  1         , 'sort' => $sortBy]) : false,
+        'last_page'    =>  $page < $lastPage      ? $buildUrl(['page' =>  $lastPage , 'sort' => $sortBy]) : false,
     ];
 
     render\view('site/index', $data, 'site_layout');
+});
+
+$action('about', function () {
+    render\view('admin/about', [], 'about_layout');
 });
 
 $action('not-found', function () {

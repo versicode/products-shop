@@ -3,7 +3,7 @@
 /* @var $action */
 
 $action('create', function (&$params, &$body) {
-    if ($body['submit']) {
+    if (isset($body['submit'])) {
         ['name' => $name, 'price' => $price, 'description' => $description] = input\cleanFlatArray($body);
 
         $pictureName = input\uploadProductPicture('picture');
@@ -16,7 +16,14 @@ $action('create', function (&$params, &$body) {
         router\redirect('site/index');
     }
 
-    render\view('admin/create', [], 'admin_layout');
+    $data['product'] = [
+        'name' => '',
+        'description' => '',
+        'price' => '',
+        'picture_name' => '',
+    ];
+
+    render\view('admin/create', $data, 'admin_layout');
 });
 
 $action('edit', function (&$params, &$body) {

@@ -3,6 +3,8 @@
 ### Tech: php, mysql, memcached
 ### Tools: docker, nginx, php-fpm
 
+![Project preview](https://github.com/versicode/products-shop/raw/master/screen.jpg "Project preview")
+
 **Installation**:
 - clone repo
 - ```cp app/config/main.php.dist app/config/main.php```
