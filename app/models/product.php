@@ -129,6 +129,7 @@ function findIds($field, $direction, $controlValue, $limit = 10)
              WHERE {$field} {$symbol} {$controlValue}
              ORDER BY {$field} {$direction}
              LIMIT {$limit};";
+    // var_dump($sql);
 
     return $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN, 0);
 }
@@ -164,4 +165,17 @@ function findPrice($id)
              WHERE id = {$id};";
 
     return $db->query($sql)->fetchColumn();
+}
+
+function findGroupedPrices()
+{
+    global $db;
+
+    $sql = 'SELECT price
+              FROM products
+             GROUP BY price
+            HAVING COUNT(*) > 1
+             ORDER BY price';
+
+    return $db->query($sql)->fetchAll(\PDO::FETCH_COLUMN, 0);
 }

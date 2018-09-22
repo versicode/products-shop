@@ -23,6 +23,17 @@ function productPages()
 
     $limit = $config['template']['products_per_page'];
 
+    $lastPage = floor($productsCount / $limit) + 1;
+
+    warmById($lastPage, $limit);
+    warmByPrice($lastPage, $limit);
+
+    echo PHP_EOL.'Done!'.PHP_EOL;
+}
+
+function warmById($lastPage, $limit)
+{
+    global $memcached;
 
     // Used to make cache warmup faster
     $cached = [];
@@ -33,19 +44,6 @@ function productPages()
 
         return array_splice($cached, 0, $limit);
     };
-
-
-    $lastPage = floor($productsCount / $limit) + 1;
-
-    warmById($lastPage, $limit, $getProductsIdsWithCache);
-    warmByPrice($lastPage, $limit, $getProductsIdsWithCache);
-
-    echo PHP_EOL.'Done!'.PHP_EOL;
-}
-
-function warmById($lastPage, $limit, $getProductsIdsWithCache)
-{
-    global $memcached;
 
     $possibleSorts = [
         'id_asc' => [
@@ -80,9 +78,34 @@ function warmById($lastPage, $limit, $getProductsIdsWithCache)
     echo PHP_EOL.'id sort warmup done!'.PHP_EOL;
 }
 
-function warmByPrice($lastPage, $limit, $getProductsIdsWithCache)
+function warmByPrice($lastPage, $limit)
 {
     global $memcached;
+
+    // Get all not unique prices
+    $groupedPrices = \models\product\findGroupedPrices();
+
+    // Used to make cache warmup faster
+    $cached = [];
+
+    $getProductsIdsChunk = function ($field, $direction, $controlValue, $limit, $count = null) use (&$groupedPrices, &$getProductsIdsChunk) {
+        $ids = \models\product\findIds($field, $direction, $controlValue, $limit * 1000);
+
+        $idsCount = count($ids);
+        if (in_array(\models\product\findPrice(end($ids)), $groupedPrices) && $count !== $idsCount) {
+            return $getProductsIdsChunk($field, $direction, $controlValue, $limit + 10, $idsCount);
+        } else {
+            return $ids;
+        }
+    };
+
+    $getProductsIdsWithCache = function ($field, $direction, $controlValue, $limit) use (&$cached, &$getProductsIdsChunk) {
+        if (count($cached) === 0) {
+            $cached = $getProductsIdsChunk($field, $direction, $controlValue, $limit);
+        }
+
+        return array_splice($cached, 0, $limit);
+    };
 
     $possibleSorts = [
         'price_asc' => [
@@ -100,34 +123,9 @@ function warmByPrice($lastPage, $limit, $getProductsIdsWithCache)
     foreach ($possibleSorts as $key => $sort) {
         echo PHP_EOL."Cache warming {$key}".PHP_EOL;
 
-        $itemsForNextLoopCycle = [];
-
         $controlValue = $sort['initialValue'];
         for ($p = 1; $p < $lastPage; ++$p) {
-            $items = [];
-
-            $itemsForNextLoopCycleCount = count($itemsForNextLoopCycle);
-
-            if ($itemsForNextLoopCycleCount === 0) {
-                // If no items from previous loop cycle - just take new items
-                // $ids = \models\product\findIds($sort['field'], $sort['direction'], $controlValue);
-                $ids = $getProductsIdsWithCache($sort['field'], $sort['direction'], $controlValue, $limit);
-            } elseif ($itemsForNextLoopCycleCount > $limit) {
-                // Take from array only $limit items, because can be more
-                // than $limit items with same price
-                $items = array_splice($itemsForNextLoopCycle, 0, $limit);
-                $ids = $items;
-            } elseif ($itemsForNextLoopCycleCount > 0) {
-                $items = $itemsForNextLoopCycle;
-                $itemsForNextLoopCycle = [];
-
-                // Select from DB as much as we need
-                // $ids = \models\product\findIds($sort['field'], $sort['direction'], $controlValue, $limit - count($items));
-                $ids = $getProductsIdsWithCache($sort['field'], $sort['direction'], $controlValue, $limit - count($items));
-
-                // Collect items from previous loop cycle + new selected from DB
-                $ids = array_merge($items, $ids);
-            }
+            $ids = $getProductsIdsWithCache($sort['field'], $sort['direction'], $controlValue, $limit);
 
             $memcached->set("page_{$p}_{$sort['field']}_{$sort['direction']}", $ids, 0);
 
@@ -136,9 +134,6 @@ function warmByPrice($lastPage, $limit, $getProductsIdsWithCache)
             }
 
             $controlValue = \models\product\findPrice(end($ids));
-
-            // Take only products not cached yet
-            $itemsForNextLoopCycle = \models\product\findIdsByPrice($controlValue, $ids);
         }
     }
 
